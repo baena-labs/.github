@@ -6,6 +6,7 @@ automation.
 ## Repositories
 
 - `org-config`: GitHub governance, rulesets, standards, and rollout automation
+- `ai-template`: AI best-practices layer — agents, skills, hooks, and rules that power Claude Code across all repos
 - application repositories: product and service code
 
 ## Working Principles
