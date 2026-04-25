@@ -8,10 +8,8 @@ Security issues may affect any repository in the `baena-labs` organization.
 
 Do not open public issues for suspected vulnerabilities.
 
-Report security concerns privately using one of:
-
-1. **GitHub Security Advisories** — open a private advisory on the affected repository via _Security → Report a vulnerability_.
-2. **Email** — send details to **security@baena-labs.dev**.
+Report security concerns privately via **GitHub Security Advisories** — open a
+private advisory on the affected repository under _Security → Report a vulnerability_.
 
 Include the following in your report:
 
