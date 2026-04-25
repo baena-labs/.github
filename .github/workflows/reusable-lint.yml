@@ -1,0 +1,33 @@
+name: Reusable — Lint
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version for linting"
+        required: false
+        type: string
+        default: "20"
+      lint-command:
+        description: "Lint command to run"
+        required: false
+        type: string
+        default: "npm run lint"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - run: npm ci
+
+      - run: ${{ inputs.lint-command }}
