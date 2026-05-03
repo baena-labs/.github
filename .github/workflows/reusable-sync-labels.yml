@@ -4,25 +4,16 @@ name: Reusable — Sync labels
 # (creates missing labels, updates color/description on existing matches,
 # does NOT delete any labels). Domain-specific labels in the calling repo
 # survive untouched.
+#
+# Source of truth is hardcoded to `baena-labs/.github/labels.yml`. The ref
+# tracks `github.job_workflow_sha` so when a caller pins this workflow with
+# `uses: baena-labs/.github/.../reusable-sync-labels.yml@<sha>`, the labels
+# data is read from the same SHA — no drift between pinned workflow and
+# floating labels file. Falls back to `main` for local-path callers where
+# `job_workflow_sha` is empty.
 
 on:
-  workflow_call:
-    inputs:
-      labels-source:
-        description: "owner/repo containing the canonical labels file"
-        required: false
-        type: string
-        default: "baena-labs/.github"
-      labels-ref:
-        description: "Branch, tag, or commit SHA to read the labels file from"
-        required: false
-        type: string
-        default: "main"
-      labels-path:
-        description: "Path to the labels file within the source repo"
-        required: false
-        type: string
-        default: "labels.yml"
+  workflow_call: {}
 
 jobs:
   sync:
@@ -34,19 +25,22 @@ jobs:
       - name: Fetch canonical labels file
         env:
           GH_TOKEN: ${{ github.token }}
-          LABELS_SOURCE: ${{ inputs.labels-source }}
-          LABELS_REF: ${{ inputs.labels-ref }}
-          LABELS_PATH: ${{ inputs.labels-path }}
+          REF: ${{ github.job_workflow_sha || 'main' }}
         run: |
-          gh api "repos/$LABELS_SOURCE/contents/$LABELS_PATH?ref=$LABELS_REF" \
+          gh api "repos/baena-labs/.github/contents/labels.yml?ref=$REF" \
             -H "Accept: application/vnd.github.raw" \
             > labels.yml
-          echo "Fetched $LABELS_PATH from $LABELS_SOURCE@$LABELS_REF:"
-          cat labels.yml
+          # Log only the size, not the content — the latter would echo the
+          # full taxonomy into Actions logs which are world-readable on
+          # public repos.
+          echo "Fetched labels.yml from baena-labs/.github@$REF ($(wc -c < labels.yml) bytes)."
 
       - name: Apply labels
         env:
           GH_TOKEN: ${{ github.token }}
+          # The reusable runs without a checkout, so `gh` has no git remote
+          # to infer the target repo from. Tell it explicitly.
+          GH_REPO: ${{ github.repository }}
         run: |
           # yq is preinstalled on ubuntu-latest runners (mikefarah/yq).
           yq -o=json '.' labels.yml | jq -c '.[]' | while read -r label; do

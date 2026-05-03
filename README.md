@@ -23,7 +23,7 @@ Shared GitHub Actions workflows that any `baena-labs` repo can call.
 | Test | `reusable-test.yml` | `node-version` (default `20`), `test-command` (default `npm test`), `install-command` (default `npm ci`) | `contents: read` |
 | Security | `reusable-security.yml` | `language` (default `javascript`) | `contents: read`, `security-events: write` |
 | Render diagrams | `reusable-render-diagrams.yml` | `python-version` (default `3.12`), `diagrams-version` (default `0.25.1`), `source-dir` (default `diagrams`), `output-dir` (default `docs/diagrams`), `commit-message` (default `chore(diagrams): render architecture diagrams [skip ci]`) | `contents: write` |
-| Sync labels | `reusable-sync-labels.yml` | `labels-source` (default `baena-labs/.github`), `labels-ref` (default `main`), `labels-path` (default `labels.yml`) | `issues: write` |
+| Sync labels | `reusable-sync-labels.yml` | (no inputs — source is hardcoded to `baena-labs/.github/labels.yml` at the same ref the workflow is called with) | `issues: write` |
 
 ### Caller requirements
 
