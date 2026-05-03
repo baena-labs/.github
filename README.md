@@ -44,6 +44,7 @@ jobs:
 - Security scan writes to GitHub Security tab via `security-events: write`.
 - Dependency review only runs on pull requests.
 - All jobs have `timeout-minutes` set to bound runner usage.
+- All third-party actions are pinned to commit SHAs (with a trailing `# vX.Y.Z` comment) and bumped weekly via Dependabot — see `.github/dependabot.yml`.
 
 ## What does not belong here
 
