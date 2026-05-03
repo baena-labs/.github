@@ -1,58 +1,34 @@
 # `.github`
 
-Default GitHub community health repository for the `baena-labs` organization.
+Default GitHub community health repository for the `baena-labs` organization. **Public.**
 
-This repository is the home for org-wide defaults that GitHub can automatically
-surface across repositories, plus shared templates and policy documents.
+This repository holds only what GitHub auto-surfaces across the org or what is genuinely safe to publish — community policies, default templates, and the org profile page. **Internal CI/CD logic, governance, and platform standards live elsewhere** (see below).
 
 ## What belongs here
 
-- `profile/README.md` for the organization profile page
-- `SECURITY.md` for responsible disclosure guidance
-- issue templates
-- pull request templates
-- reusable workflows when they are stable enough to share
+- `profile/README.md` — the organization profile page
+- `SECURITY.md` — responsible disclosure
+- `CODE_OF_CONDUCT.md`
+- `CONTRIBUTING.md`
+- `AGENTS.md` — public self-description of this repo's purpose for AI maintainers
+- `CHANGELOG.md` — history of this repo itself
+- `.github/FUNDING.yml`
+- `.github/ISSUE_TEMPLATE/` (the issue templates)
+- `PULL_REQUEST_TEMPLATE.md` (root-level — the canonical PR template; per the project's own `CHANGELOG.md` entry for `0.1.1` the duplicate `.github/PULL_REQUEST_TEMPLATE.md` was removed)
 
-## Reusable workflows
-
-Shared GitHub Actions workflows that any `baena-labs` repo can call.
-
-| Workflow | File | Inputs | Permissions |
-|----------|------|--------|-------------|
-| Lint | `reusable-lint.yml` | `node-version` (default `20`), `lint-command` (default `npm run lint`), `install-command` (default `npm ci`) | `contents: read` |
-| Test | `reusable-test.yml` | `node-version` (default `20`), `test-command` (default `npm test`), `install-command` (default `npm ci`) | `contents: read` |
-| Security | `reusable-security.yml` | `language` (default `javascript`) | `contents: read`, `security-events: write` |
-| Render diagrams | `reusable-render-diagrams.yml` | `python-version` (default `3.12`), `diagrams-version` (default `0.25.1`), `source-dir` (default `diagrams`), `output-dir` (default `docs/diagrams`), `commit-message` (default `chore(diagrams): render architecture diagrams [skip ci]`) | `contents: write` |
-
-### Caller requirements
-
-- **`reusable-lint.yml` and `reusable-test.yml`** are Node-based and assume an npm project with a `package-lock.json` (used for `cache: npm` and the default `npm ci`). For yarn/pnpm, override `install-command` — note that the dependency cache will still be configured for npm. Non-Node repos should use their own workflow.
-- **`reusable-security.yml`** uses CodeQL. For TypeScript-heavy repos, pass `language: javascript-typescript` (the modern identifier covers both JS and TS).
-- **`reusable-render-diagrams.yml`** assumes diagrams are written with the [`diagrams`](https://diagrams.mingrammer.com/) Python library, one Python file per diagram, sourced from `source-dir`. The job pushes rendered PNGs back to the calling branch — callers must grant `permissions: contents: write` and should invoke this on `push` events (not `pull_request` from forks, where the push will fail). Branch-protected branches that require signed or reviewed commits will reject the bot push; in those cases call this on a separate branch and open a PR.
-
-### Usage
-
-```yaml
-jobs:
-  lint:
-    uses: baena-labs/.github/.github/workflows/reusable-lint.yml@main
-    with:
-      node-version: "20"
-```
-
-### Security assumptions
-
-- Workflows run with minimal permissions; callers must not escalate.
-- Security scan writes to GitHub Security tab via `security-events: write`.
-- Dependency review only runs on pull requests.
-- All jobs have `timeout-minutes` set to bound runner usage.
-- All third-party actions are pinned to commit SHAs (with a trailing `# vX.Y.Z` comment) and bumped weekly via Dependabot — see `.github/dependabot.yml`.
+If a file would expose internal implementation, governance, repo purposes, deployment logic, CI/CD standards, or AI tooling internals to the public, it does not belong here.
 
 ## What does not belong here
 
-- organization rulesets
-- `gh api` automation
-- audit scripts
-- environment-specific rollout plans
+These live in the **private** `baena-labs/org-config` repository, the platform control plane:
 
-Those belong in the separate `org-config` repository.
+- Reusable CI/CD workflows (lint, test, security, render-diagrams, label sync, etc.)
+- Terraform workflow standards
+- GitHub Actions permissions defaults
+- Label taxonomy and the canonical labels manifest
+- Org rulesets
+- Repo onboarding and bootstrap automation
+- Internal repo context, purposes, and governance documentation
+- `gh api` admin scripts and audit tooling
+
+If you are looking for a reusable workflow to call from a `baena-labs` repo, check `baena-labs/org-config/.github/workflows/`.

@@ -16,7 +16,7 @@ GitHub organization defaults repository for `baena-labs`.
 
 ## Required Coordination
 - If changing disclosure, support, or contribution policy, update related templates in the same change.
-- If adding reusable workflows, document required inputs, permissions, and security assumptions in `README.md`.
+- Reusable workflows, label taxonomies, rulesets, and CI/CD standards belong in private `org-config`, not here. Do not add them.
 - If a template assumes rulesets or checks that are enforced elsewhere, reference `org-config`.
 
 ## Expected Outputs
