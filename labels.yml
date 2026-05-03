@@ -1,47 +1,29 @@
-# Canonical base label set for all baena-labs repositories.
+# Canonical baena-labs label set. Source of truth for all org repos.
 #
 # Synced by `.github/workflows/reusable-sync-labels.yml`. Sync is ADDITIVE:
-# repo-specific labels (e.g. `area: brain` in legal-brain) are NOT deleted.
-# Edit colors/descriptions here to update them everywhere on the next sync.
+# repo-specific labels (e.g. legacy `area: brain` in legal-brain) are NOT
+# deleted. Edit colors/descriptions here and the next sync propagates them.
 #
-# Do NOT add domain-specific labels to this file. `area: <domain>` labels
-# stay in the consuming repo so they don't leak across the org.
-
-# --- Type --------------------------------------------------------------------
-- name: bug
-  color: d73a4a
-  description: Something isn't working
-- name: enhancement
-  color: a2eeef
-  description: New feature or request
-- name: documentation
-  color: 0075ca
-  description: Improvements or additions to documentation
-- name: chore
-  color: cfd3d7
-  description: Maintenance, refactor, or non-feature change
-- name: infrastructure
-  color: 5319e7
-  description: Build, CI, deployment, or platform-level change
+# Naming convention: slash-style families — `priority/`, `type/`, `area/`,
+# `status/`. Decision per baena-labs/org-config#16. Domain-specific labels
+# (e.g. `area/cases` for legal-brain) stay per-repo and are NOT added here.
+#
+# This file currently ships only the priority family. Type / status / area
+# label families will be added as their taxonomies are decided in
+# baena-labs/org-config#16.
 
 # --- Priority ----------------------------------------------------------------
-- name: "P1: high"
+# Required on every issue/PR (will be enforced by an org ruleset — see
+# baena-labs/org-config#16).
+- name: priority/p0
   color: b60205
-  description: Critical or urgent
-- name: "P2: medium"
+  description: Critical / blocker / outage — respond in hours
+- name: priority/p1
+  color: d93f0b
+  description: High / next sprint — days
+- name: priority/p2
   color: fbca04
-  description: Standard priority
-- name: "P3: low"
-  color: 0e8a16
-  description: Low priority / nice-to-have
-
-# --- Status ------------------------------------------------------------------
-- name: "status: blocked"
-  color: d4c5f9
-  description: Blocked on external work or decision
-- name: "status: needs-triage"
-  color: c5def5
-  description: Awaiting triage / not yet prioritized
-- name: "status: in-progress"
-  color: 1d76db
-  description: Actively being worked on
+  description: Normal / planned — weeks
+- name: priority/p3
+  color: cccccc
+  description: Low / nice-to-have / backlog — whenever
