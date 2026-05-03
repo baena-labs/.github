@@ -1,0 +1,65 @@
+name: Reusable — Sync labels
+
+# Applies the canonical baena-labs label set to the calling repo additively
+# (creates missing labels, updates color/description on existing matches,
+# does NOT delete any labels). Domain-specific labels in the calling repo
+# survive untouched.
+
+on:
+  workflow_call:
+    inputs:
+      labels-source:
+        description: "owner/repo containing the canonical labels file"
+        required: false
+        type: string
+        default: "baena-labs/.github"
+      labels-ref:
+        description: "Branch, tag, or commit SHA to read the labels file from"
+        required: false
+        type: string
+        default: "main"
+      labels-path:
+        description: "Path to the labels file within the source repo"
+        required: false
+        type: string
+        default: "labels.yml"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Fetch canonical labels file
+        env:
+          GH_TOKEN: ${{ github.token }}
+          LABELS_SOURCE: ${{ inputs.labels-source }}
+          LABELS_REF: ${{ inputs.labels-ref }}
+          LABELS_PATH: ${{ inputs.labels-path }}
+        run: |
+          gh api "repos/$LABELS_SOURCE/contents/$LABELS_PATH?ref=$LABELS_REF" \
+            -H "Accept: application/vnd.github.raw" \
+            > labels.yml
+          echo "Fetched $LABELS_PATH from $LABELS_SOURCE@$LABELS_REF:"
+          cat labels.yml
+
+      - name: Apply labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # yq is preinstalled on ubuntu-latest runners (mikefarah/yq).
+          yq -o=json '.' labels.yml | jq -c '.[]' | while read -r label; do
+            name=$(jq -r '.name' <<< "$label")
+            color=$(jq -r '.color' <<< "$label")
+            description=$(jq -r '.description // ""' <<< "$label")
+            echo "::group::Upsert label: $name"
+            # `gh label create --force` upserts: creates if missing,
+            # updates color/description if it already exists.
+            gh label create "$name" \
+              --color "$color" \
+              --description "$description" \
+              --force
+            echo "::endgroup::"
+          done
+          echo "Sync complete (additive — no labels were deleted)."

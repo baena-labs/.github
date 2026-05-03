@@ -1,0 +1,18 @@
+name: Sync labels
+
+# Smoke-test caller for the reusable label sync workflow. Keeps this repo's
+# own label set aligned with `labels.yml` whenever it changes, and offers a
+# manual dispatch path for ad-hoc resync.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - labels.yml
+
+jobs:
+  sync:
+    permissions:
+      issues: write
+    uses: ./.github/workflows/reusable-sync-labels.yml

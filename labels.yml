@@ -1,0 +1,47 @@
+# Canonical base label set for all baena-labs repositories.
+#
+# Synced by `.github/workflows/reusable-sync-labels.yml`. Sync is ADDITIVE:
+# repo-specific labels (e.g. `area: brain` in legal-brain) are NOT deleted.
+# Edit colors/descriptions here to update them everywhere on the next sync.
+#
+# Do NOT add domain-specific labels to this file. `area: <domain>` labels
+# stay in the consuming repo so they don't leak across the org.
+
+# --- Type --------------------------------------------------------------------
+- name: bug
+  color: d73a4a
+  description: Something isn't working
+- name: enhancement
+  color: a2eeef
+  description: New feature or request
+- name: documentation
+  color: 0075ca
+  description: Improvements or additions to documentation
+- name: chore
+  color: cfd3d7
+  description: Maintenance, refactor, or non-feature change
+- name: infrastructure
+  color: 5319e7
+  description: Build, CI, deployment, or platform-level change
+
+# --- Priority ----------------------------------------------------------------
+- name: "P1: high"
+  color: b60205
+  description: Critical or urgent
+- name: "P2: medium"
+  color: fbca04
+  description: Standard priority
+- name: "P3: low"
+  color: 0e8a16
+  description: Low priority / nice-to-have
+
+# --- Status ------------------------------------------------------------------
+- name: "status: blocked"
+  color: d4c5f9
+  description: Blocked on external work or decision
+- name: "status: needs-triage"
+  color: c5def5
+  description: Awaiting triage / not yet prioritized
+- name: "status: in-progress"
+  color: 1d76db
+  description: Actively being worked on
