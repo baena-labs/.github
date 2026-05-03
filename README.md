@@ -10,12 +10,13 @@ This repository holds only what GitHub auto-surfaces across the org or what is g
 - `SECURITY.md` — responsible disclosure
 - `CODE_OF_CONDUCT.md`
 - `CONTRIBUTING.md`
+- `AGENTS.md` — public self-description of this repo's purpose for AI maintainers
 - `CHANGELOG.md` — history of this repo itself
 - `.github/FUNDING.yml`
-- `.github/copilot-instructions.md` — generic review-focus guidance for the org
-- `.github/ISSUE_TEMPLATE/` and `.github/PULL_REQUEST_TEMPLATE.md`
+- `.github/ISSUE_TEMPLATE/` (the issue templates)
+- `PULL_REQUEST_TEMPLATE.md` (root-level — the canonical PR template; per the project's own `CHANGELOG.md` entry for `0.1.1` the duplicate `.github/PULL_REQUEST_TEMPLATE.md` was removed)
 
-If a file would expose internal implementation, governance, repo purposes, deployment logic, or CI/CD standards to the public, it does not belong here.
+If a file would expose internal implementation, governance, repo purposes, deployment logic, CI/CD standards, or AI tooling internals to the public, it does not belong here.
 
 ## What does not belong here
 
