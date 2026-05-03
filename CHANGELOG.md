@@ -8,6 +8,15 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Removed
+- `.github/workflows/reusable-lint.yml`, `reusable-test.yml`, `reusable-security.yml`, `reusable-render-diagrams.yml` — reusable CI/CD workflows briefly published from this repo (introduced in unreleased state via PRs #17 and #22). Per the architecture decision making this repo public-defaults-only, they relocated to private `baena-labs/org-config/.github/workflows/`. No org-internal callers existed at the time of removal (verified via `gh search code` across `baena-labs`).
+- `.github/dependabot.yml` — tracked actions used in the now-removed workflows; nothing else here uses third-party actions.
+- `.github/copilot-instructions.md` — referenced internal Claude Code tooling (`.claude/`, hooks, agents) and so did not fit the public-minimal posture.
+
+### Changed
+- `README.md` rewritten to state the public-minimal posture explicitly and point readers at `baena-labs/org-config` for internal CI/CD, rulesets, governance, repo onboarding, and label taxonomy.
+- `AGENTS.md` "Required Coordination" updated to record that reusable workflows / label taxonomies / rulesets / CI/CD standards belong in `org-config`, not here.
+
 ---
 
 ## [0.1.2] — 2026-04-22
