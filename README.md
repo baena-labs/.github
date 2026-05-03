@@ -22,11 +22,13 @@ Shared GitHub Actions workflows that any `baena-labs` repo can call.
 | Lint | `reusable-lint.yml` | `node-version` (default `20`), `lint-command` (default `npm run lint`), `install-command` (default `npm ci`) | `contents: read` |
 | Test | `reusable-test.yml` | `node-version` (default `20`), `test-command` (default `npm test`), `install-command` (default `npm ci`) | `contents: read` |
 | Security | `reusable-security.yml` | `language` (default `javascript`) | `contents: read`, `security-events: write` |
+| Render diagrams | `reusable-render-diagrams.yml` | `python-version` (default `3.12`), `diagrams-version` (default `0.25.1`), `source-dir` (default `diagrams`), `output-dir` (default `docs/diagrams`), `commit-message` (default `chore(diagrams): render architecture diagrams [skip ci]`) | `contents: write` |
 
 ### Caller requirements
 
 - **`reusable-lint.yml` and `reusable-test.yml`** are Node-based and assume an npm project with a `package-lock.json` (used for `cache: npm` and the default `npm ci`). For yarn/pnpm, override `install-command` — note that the dependency cache will still be configured for npm. Non-Node repos should use their own workflow.
 - **`reusable-security.yml`** uses CodeQL. For TypeScript-heavy repos, pass `language: javascript-typescript` (the modern identifier covers both JS and TS).
+- **`reusable-render-diagrams.yml`** assumes diagrams are written with the [`diagrams`](https://diagrams.mingrammer.com/) Python library, one Python file per diagram, sourced from `source-dir`. The job pushes rendered PNGs back to the calling branch — callers must grant `permissions: contents: write` and should invoke this on `push` events (not `pull_request` from forks, where the push will fail). Branch-protected branches that require signed or reviewed commits will reject the bot push; in those cases call this on a separate branch and open a PR.
 
 ### Usage
 
