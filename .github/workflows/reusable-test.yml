@@ -1,0 +1,39 @@
+name: Reusable — Test
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version for tests"
+        required: false
+        type: string
+        default: "20"
+      test-command:
+        description: "Test command to run"
+        required: false
+        type: string
+        default: "npm test"
+      install-command:
+        description: "Install command to run before tests (assumes npm + package-lock.json by default)"
+        required: false
+        type: string
+        default: "npm ci"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: npm
+
+      - run: ${{ inputs.install-command }}
+
+      - run: ${{ inputs.test-command }}
