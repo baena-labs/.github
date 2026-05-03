@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: "npm run lint"
+      install-command:
+        description: "Install command to run before linting (assumes npm + package-lock.json by default)"
+        required: false
+        type: string
+        default: "npm ci"
 
 permissions:
   contents: read
@@ -20,6 +25,7 @@ permissions:
 jobs:
   lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
 
@@ -28,6 +34,6 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: npm
 
-      - run: npm ci
+      - run: ${{ inputs.install-command }}
 
       - run: ${{ inputs.lint-command }}

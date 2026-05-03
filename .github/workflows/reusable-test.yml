@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: "npm test"
+      install-command:
+        description: "Install command to run before tests (assumes npm + package-lock.json by default)"
+        required: false
+        type: string
+        default: "npm ci"
 
 permissions:
   contents: read
@@ -20,6 +25,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -28,6 +34,6 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: npm
 
-      - run: npm ci
+      - run: ${{ inputs.install-command }}
 
       - run: ${{ inputs.test-command }}
